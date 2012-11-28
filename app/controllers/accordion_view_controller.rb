@@ -6,7 +6,7 @@ class AccordionViewController < UITableViewController
     if(super)
       @expanded_row_index = -1
       @data = []
-      (0..100).each_with_index{|a, i| @data << "Data Cell #{i}"}
+      (0..20).each_with_index{|a, i| @data << "Cell #{i}"}
     end
 
     self
@@ -28,19 +28,25 @@ class AccordionViewController < UITableViewController
     expanded_cell = (@expanded_row_index != -1 and @expanded_row_index + 1 == row)
 
     if(not expanded_cell)
-      cell = table_view.dequeueReusableCellWithIdentifier("data")
-      unless(cell)
-        cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:"data")
-      end
+      cell = table_view.dequeueReusableCellWithIdentifier("parent")
+      cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:"parent") unless(cell)
       cell.textLabel.text = data
       cell
     else
-      cell = table_view.dequeueReusableCellWithIdentifier("expanded")
-      unless(cell)
-        cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:"expanded")
-      end
+      cell = table_view.dequeueReusableCellWithIdentifier("child")
+      cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:"child") unless(cell)
       cell.textLabel.text = "Details for cell - #{data}"
       cell
+    end
+  end
+
+  def tableView(table_view, willDisplayCell:cell, forRowAtIndexPath:index_path)
+    row = index_path.row
+    expanded_cell = (@expanded_row_index != -1 and @expanded_row_index + 1 == row)
+    if(not expanded_cell)
+      cell.setBackgroundColor(UIColor.redColor)
+    else
+      cell.setBackgroundColor(UIColor.blueColor)
     end
   end
 
@@ -51,6 +57,7 @@ class AccordionViewController < UITableViewController
     return nil if(@expanded_row_index != -1 and @expanded_row_index + 1 == row)
 
     table_view.beginUpdates
+
     if(@expanded_row_index != -1)
       row_to_remove = @expanded_row_index + 1
       prevent_reopen = row == @expanded_row_index
