@@ -60,7 +60,7 @@ class AccordionViewController < UITableViewController
       @expanded_row_index = -1
 
 
-      table_view.deleteRowsAtIndexPaths([row_to_remove], withRowAnimation:UITableViewRowAnimationTop)
+      table_view.deleteRowsAtIndexPaths([NSIndexPath.indexPathForRow(row_to_remove, inSection:0)], withRowAnimation:UITableViewRowAnimationTop)
     end
 
     row_to_add = -1
@@ -68,7 +68,7 @@ class AccordionViewController < UITableViewController
       row_to_add = row + 1
       @expanded_row_index = row
 
-      table_view.insertRowsAtIndexPaths([row_to_add], withRowAnimation:UITableViewRowAnimationTop)
+      table_view.insertRowsAtIndexPaths([NSIndexPath.indexPathForRow(row_to_add, inSection:0)], withRowAnimation:UITableViewRowAnimationTop)
     end
 
     table_view.endUpdates
